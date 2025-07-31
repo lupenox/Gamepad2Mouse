@@ -20,10 +20,8 @@ Ever wanted to control your PC with an Xbox controller like a total boss? Now yo
 💽 **Install dependencies**
 ```bash
 pip install pygame pyautogui
-🚀 How to Run
 
-bash
-Copy code
+🚀 How to Run
 python main.py
 ⚠️ Make sure to run it as administrator, or the keyboard toggle won’t work right.
 
