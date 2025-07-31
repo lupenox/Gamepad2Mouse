@@ -3,8 +3,27 @@ import ctypes
 from ctypes import wintypes
 import time
 import math
-import pyautogui  # 🧠 Needed for mouse clicks
+import pyautogui
+import subprocess
+import os
+import sys
 
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
+
+# Relaunch as admin if not already
+if not is_admin():
+    ctypes.windll.shell32.ShellExecuteW(
+        None, "runas", sys.executable, " ".join(sys.argv), None, 1
+    )
+    sys.exit()
+
+
+# Track keyboard state
+keyboard_open = False
 pyautogui.FAILSAFE = False
 
 # Setup native mouse movement
@@ -53,6 +72,15 @@ try:
                 elif event.button == 1:
                     pyautogui.click(button='right')
                     print("🖱️ Right click (B button)")
+                elif event.button == 7:  # Start button
+                    if not keyboard_open:
+                        subprocess.Popen(['cmd', '/c', 'start', '', 'osk.exe'], shell=True)
+                        keyboard_open = True
+                        print("⌨️ On-screen keyboard opened (Start button)")
+                    else:
+                        subprocess.call("taskkill /im osk.exe /f", shell=True)
+                        keyboard_open = False
+                        print("❌ On-screen keyboard closed (Start button)")
 
         x = joystick.get_axis(0)
         y = joystick.get_axis(1)
